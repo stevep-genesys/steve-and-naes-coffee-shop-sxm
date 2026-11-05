@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Steve and Nae's Coffee Shop SXM</title>
+<meta name="description" content="Coffee, pastries and breakfast on St. Martin / Sint Maarten. See our menu, hours, photos and how to reach us.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --night: #05323F;        /* deep ocean, header and footer */
+    --ocean: #0B5C7A;        /* headings */
+    --turquoise: #19C1CC;    /* hero */
+    --foam: #D9F4F2;         /* page headers */
+    --coral: #FF6A4D;        /* accents and fills */
+    --coral-text: #C73A1E;   /* coral that passes contrast on light backgrounds */
+    --sun: #FFC933;          /* highlights */
+    --palm: #1B9A5F;         /* green */
+    --paper: #FFFDF7;
+    --ink: #16303A;
+    --muted: #4C666F;
+
+    --display: "Bricolage Grotesque", "Trebuchet MS", system-ui, sans-serif;
+    --body: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--body);
+    font-size: 1.0625rem;
+    line-height: 1.6;
+    color: var(--ink);
+    background: var(--paper);
+  }
+  a { color: inherit; }
+  :focus-visible { outline: 3px solid var(--coral); outline-offset: 3px; border-radius: 4px; }
+
+  /* ---------- Header ---------- */
+  header.site { background: var(--night); color: var(--paper); border-bottom: 5px solid var(--coral); }
+  .bar {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0.9rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem 1.5rem;
+    flex-wrap: wrap;
+  }
+  .brand {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: 1.2rem;
+    letter-spacing: -0.01em;
+    text-decoration: none;
+    line-height: 1.1;
+  }
+  .brand span { color: var(--sun); }
+  nav ul { list-style: none; display: flex; gap: 0.2rem; flex-wrap: wrap; }
+  nav a {
+    display: block;
+    padding: 0.45rem 0.85rem;
+    border-radius: 999px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.97rem;
+  }
+  nav a:hover { background: rgba(255,255,255,0.14); }
+  nav a[aria-current="page"] { background: var(--sun); color: var(--night); }
+
+  main { min-height: 60vh; }
+  .page { display: none; }
+  .page.active { display: block; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 1.5rem; }
+
+  /* ---------- Home hero ---------- */
+  .hero { background: var(--turquoise); color: var(--night); overflow: hidden; }
+  .hero .wrap {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 2rem;
+    align-items: center;
+    padding-top: 3rem;
+    padding-bottom: 4.5rem;
+  }
+  .hero h1 {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: clamp(2.6rem, 7vw, 5.2rem);
+    line-height: 0.98;
+    letter-spacing: -0.03em;
+  }
+  .hero h1 .amp { color: var(--paper); }
+  .hero .tag { margin-top: 1.25rem; font-size: 1.2rem; max-width: 30ch; font-weight: 500; }
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-top: 1.75rem;
+    padding: 0.6rem 1.1rem;
+    background: var(--night);
+    color: var(--paper);
+    border-radius: 999px;
+    font-weight: 600;
+  }
+  .status .dot { width: 0.75rem; height: 0.75rem; border-radius: 50%; background: #8A9A9C; }
+  .status.open .dot { background: #5BE08F; box-shadow: 0 0 0 4px rgba(91,224,143,0.28); }
+  .status.closed .dot { background: var(--coral); }
+  .hero-actions { margin-top: 1.5rem; display: flex; gap: 0.75rem; flex-wrap: wrap; }
+  .btn {
+    display: inline-block;
+    padding: 0.8rem 1.4rem;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 1rem;
+    font-family: var(--body);
+    text-decoration: none;
+    border: 2px solid transparent;
+    cursor: pointer;
+  }
+  .btn.primary { background: var(--coral); color: var(--night); }
+  .btn.primary:hover { background: #FF8267; }
+  .btn.ghost { border-color: var(--night); color: var(--night); }
+  .btn.ghost:hover { background: rgba(5,50,63,0.1); }
+
+  .hero-art svg { width: 100%; height: auto; display: block; }
+  .sun-rise { animation: rise 1.4s cubic-bezier(.2,.8,.2,1) both; }
+  @keyframes rise { from { transform: translateY(70px); opacity: 0; } to { transform: none; opacity: 1; } }
+
+  .wave-wrap { background: var(--turquoise); line-height: 0; }
+  .wave { display: block; width: 100%; height: 48px; }
+
+  /* ---------- Home body ---------- */
+  .intro { padding: 3rem 0 4rem; }
+  .intro-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.5rem; }
+  .intro h2 { font-family: var(--display); font-size: 1.5rem; line-height: 1.15; letter-spacing: -0.01em; margin-bottom: 0.5rem; color: var(--ocean); }
+  .intro p { color: var(--muted); max-width: 36ch; }
+  .intro a, .link { color: var(--coral-text); font-weight: 600; }
+
+  /* ---------- Page headings ---------- */
+  .page-head { background: var(--foam); padding: 3rem 0 2.5rem; border-bottom: 5px solid var(--sun); }
+  .page-head h1 { font-family: var(--display); font-weight: 800; font-size: clamp(2.2rem, 5vw, 3.4rem); letter-spacing: -0.025em; line-height: 1.05; color: var(--ocean); }
+  .page-head p { margin-top: 0.6rem; color: var(--muted); max-width: 52ch; }
+
+  /* ---------- Menu ---------- */
+  .menu { padding: 3rem 0 4.5rem; }
+  .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem 4rem; }
+  .menu section h2 { font-family: var(--display); font-size: 1.6rem; letter-spacing: -0.015em; color: var(--ocean); padding-bottom: 0.5rem; border-bottom: 3px solid var(--coral); margin-bottom: 1.1rem; }
+  .menu ul { list-style: none; }
+  .menu li { margin-bottom: 1.1rem; }
+  .item-row { display: flex; align-items: baseline; gap: 0.6rem; }
+  .item-name { font-weight: 600; }
+  .leader { flex: 1; border-bottom: 2px dotted #8FC9CC; transform: translateY(-4px); min-width: 1rem; }
+  .price { font-weight: 600; font-variant-numeric: tabular-nums; }
+  .item-desc { color: var(--muted); font-size: 0.97rem; max-width: 44ch; }
+  .menu-note { margin-top: 3rem; color: var(--muted); font-size: 0.95rem; }
+
+  /* ---------- Hours ---------- */
+  .hours { padding: 3rem 0 4.5rem; }
+  .hours-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 3rem; align-items: start; }
+  table.hours-table { width: 100%; border-collapse: collapse; }
+  .hours-table th, .hours-table td { text-align: left; padding: 0.95rem 1rem; border-bottom: 1px solid #CDE6E6; font-size: 1.1rem; }
+  .hours-table th { font-weight: 600; }
+  .hours-table td { font-variant-numeric: tabular-nums; }
+  .hours-table tr.today { background: var(--sun); color: var(--night); }
+  .hours-table tr.today th, .hours-table tr.today td { border-bottom-color: transparent; font-weight: 700; }
+  .hours-table tr.today th:first-child { border-radius: 10px 0 0 10px; }
+  .hours-table tr.today td:last-child { border-radius: 0 10px 10px 0; }
+  .today-badge { font-size: 0.85rem; font-weight: 700; margin-left: 0.5rem; }
+
+  .visit { background: var(--ocean); color: var(--paper); padding: 2rem; border-radius: 20px; }
+  .visit h2 { font-family: var(--display); font-size: 1.5rem; margin-bottom: 0.75rem; letter-spacing: -0.01em; }
+  .visit p + p { margin-top: 0.75rem; }
+  .visit a { color: var(--sun); }
+  .visit .live { margin-top: 1.25rem; }
+  .visit .status { margin-top: 0; background: var(--night); }
+
+  /* ---------- Gallery ---------- */
+  .gallery { padding: 3rem 0 4.5rem; }
+  .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+  .tile {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    border: 0;
+    border-radius: 16px;
+    overflow: hidden;
+    background: var(--bg, var(--foam));
+    color: var(--fg, var(--night));
+    font-family: var(--body);
+    cursor: default;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 1rem;
+  }
+  .tile img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .tile.has-photo { cursor: zoom-in; padding: 0; }
+  .tile.has-photo:hover img { transform: scale(1.04); }
+  .tile img { transition: transform .3s ease; }
+  .tile .ph svg { width: 44px; height: 44px; margin: 0 auto 0.5rem; display: block; }
+  .tile .ph strong { display: block; font-family: var(--display); font-size: 1.15rem; }
+  .tile .ph span { font-size: 0.9rem; }
+  .tile:nth-child(1) { --bg: var(--turquoise); }
+  .tile:nth-child(2) { --bg: var(--coral); }
+  .tile:nth-child(3) { --bg: var(--sun); }
+  .tile:nth-child(4) { --bg: var(--palm); --fg: #fff; }
+  .tile:nth-child(5) { --bg: var(--ocean); --fg: #fff; }
+  .tile:nth-child(6) { --bg: var(--foam); }
+  .tile:nth-child(4) .ph, .tile:nth-child(5) .ph { color: #fff; }
+  .tile.has-photo .cap {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    padding: 1.5rem 1rem 0.75rem;
+    text-align: left;
+    color: #fff;
+    font-weight: 600;
+    background: linear-gradient(transparent, rgba(5,50,63,0.75));
+  }
+  .gallery-note { margin-top: 1.5rem; color: var(--muted); font-size: 0.95rem; }
+
+  dialog#lightbox {
+    border: 0; border-radius: 16px; padding: 0; background: var(--night); color: #fff;
+    max-width: min(92vw, 960px); width: 100%;
+    margin: auto;
+  }
+  dialog#lightbox::backdrop { background: rgba(5,50,63,0.85); }
+  #lightbox img { display: block; width: 100%; max-height: 80vh; object-fit: contain; background: #000; }
+  #lightbox .lb-bar { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 0.75rem 1rem; }
+  #lightbox button { background: var(--sun); color: var(--night); border: 0; border-radius: 999px; padding: 0.5rem 1.1rem; font-weight: 700; font-family: var(--body); cursor: pointer; }
+
+  /* ---------- Contact ---------- */
+  .contact { padding: 3rem 0 2rem; }
+  .contact-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 3.5rem; align-items: start; }
+  .contact h2 { font-family: var(--display); font-size: 1.6rem; letter-spacing: -0.015em; color: var(--ocean); margin-bottom: 1rem; }
+  .field { margin-bottom: 1.1rem; }
+  .field label { display: block; font-weight: 600; margin-bottom: 0.3rem; }
+  .field input, .field textarea {
+    width: 100%;
+    font: inherit;
+    color: var(--ink);
+    background: #fff;
+    border: 2px solid #8FC9CC;
+    border-radius: 12px;
+    padding: 0.7rem 0.9rem;
+  }
+  .field textarea { min-height: 150px; resize: vertical; }
+  .field input:focus, .field textarea:focus { outline: 3px solid var(--coral); outline-offset: 1px; border-color: var(--ocean); }
+  .form-msg { margin-top: 1rem; font-weight: 600; color: var(--palm); min-height: 1.5em; }
+  .form-msg.error { color: var(--coral-text); }
+  .details p { margin-bottom: 0.9rem; }
+  .details strong { display: block; font-size: 0.95rem; color: var(--muted); font-weight: 600; }
+  .details a { color: var(--coral-text); font-weight: 600; }
+  .follow { margin-top: 2rem; }
+  .follow h2 { font-size: 1.3rem; }
+
+  .social { list-style: none; display: flex; flex-wrap: wrap; gap: 0.6rem; }
+  .social a {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.5rem 1rem 0.5rem 0.75rem;
+    border-radius: 999px;
+    background: var(--night);
+    color: #fff;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .social a:hover { background: var(--ocean); }
+  .social svg { width: 22px; height: 22px; flex: none; }
+  .social.icons-only a { padding: 0.55rem; background: rgba(255,255,255,0.1); }
+  .social.icons-only a:hover { background: var(--coral); color: var(--night); }
+
+  .map-section { padding: 1.5rem 0 4.5rem; }
+  .map-frame { border-radius: 20px; overflow: hidden; border: 3px solid var(--turquoise); background: var(--foam); }
+  .map-frame iframe { display: block; width: 100%; height: 380px; border: 0; }
+  .map-link { margin-top: 0.8rem; }
+
+  /* ---------- Footer ---------- */
+  footer.site { background: var(--night); color: #D5ECEE; padding: 2.5rem 0; border-top: 5px solid var(--turquoise); }
+  footer .wrap { display: flex; justify-content: space-between; gap: 1.5rem; flex-wrap: wrap; }
+  footer strong { font-family: var(--display); font-size: 1.15rem; color: #fff; }
+  footer a { color: var(--sun); }
+  footer .social { margin-top: 0.75rem; }
+  .foot-right { text-align: right; }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 820px) {
+    .hero .wrap { grid-template-columns: 1fr; padding-top: 2rem; }
+    .hero-art { max-width: 320px; }
+    .intro-grid { grid-template-columns: 1fr; gap: 1.75rem; }
+    .menu-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .hours-grid, .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+    .foot-right { text-align: left; }
+  }
+  @media (max-width: 480px) {
+    .gallery-grid { grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .sun-rise { animation: none; }
+    html { scroll-behavior: auto; }
+    .tile img { transition: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="bar">
+    <a class="brand" href="#home">Steve and Nae's <span>Coffee Shop SXM</span></a>
+    <nav aria-label="Main">
+      <ul>
+        <li><a href="#home" data-link="home">Home</a></li>
+        <li><a href="#menu" data-link="menu">Menu</a></li>
+        <li><a href="#hours" data-link="hours">Hours</a></li>
+        <li><a href="#gallery" data-link="gallery">Gallery</a></li>
+        <li><a href="#contact" data-link="contact">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- HOME -->
+  <div class="page" id="page-home">
+    <div class="hero">
+      <div class="wrap">
+        <div>
+          <h1>Steve <span class="amp">&amp;</span> Nae's<br>Coffee Shop</h1>
+          <p class="tag">Island coffee, fresh pastries and a good start to your day in St. Martin.</p>
+          <div class="status" data-status role="status"><span class="dot"></span><span class="status-text">Checking hours…</span></div>
+          <div class="hero-actions">
+            <a class="btn primary" href="#menu">See the menu</a>
+            <a class="btn ghost" href="#contact">Find us</a>
+          </div>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <svg viewBox="0 0 400 360" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <path id="frond" d="M0 0 C30 -34 90 -42 160 -8 C100 -8 45 6 0 0Z"/>
+            </defs>
+            <!-- palm fronds -->
+            <g fill="#1B9A5F">
+              <use href="#frond" transform="translate(6 345) rotate(-78)"/>
+              <use href="#frond" transform="translate(6 345) rotate(-48)"/>
+              <use href="#frond" transform="translate(6 345) rotate(-18)"/>
+            </g>
+            <g fill="#12794A">
+              <use href="#frond" transform="translate(396 345) scale(-1 1) rotate(-70)"/>
+              <use href="#frond" transform="translate(396 345) scale(-1 1) rotate(-38)"/>
+            </g>
+            <g class="sun-rise">
+              <circle cx="200" cy="150" r="112" fill="#FFC933"/>
+              <g stroke="#FFC933" stroke-width="10" stroke-linecap="round">
+                <line x1="200" y1="10" x2="200" y2="-6"/>
+                <line x1="82" y1="48" x2="70" y2="36"/>
+                <line x1="318" y1="48" x2="330" y2="36"/>
+                <line x1="30" y1="150" x2="12" y2="150"/>
+                <line x1="370" y1="150" x2="388" y2="150"/>
+              </g>
+            </g>
+            <!-- steam -->
+            <g fill="none" stroke="#FFFDF7" stroke-width="7" stroke-linecap="round">
+              <path d="M170 150 q-14 -20 0 -40 t0 -40"/>
+              <path d="M205 150 q-14 -20 0 -40 t0 -40"/>
+              <path d="M240 150 q-14 -20 0 -40 t0 -40"/>
+            </g>
+            <!-- cup -->
+            <path d="M110 170 h180 v60 a90 90 0 0 1 -90 90 a90 90 0 0 1 -90 -90 z" fill="#05323F"/>
+            <path d="M290 190 h22 a34 34 0 0 1 0 68 h-34" fill="none" stroke="#05323F" stroke-width="16" stroke-linecap="round"/>
+            <rect x="110" y="170" width="180" height="16" rx="8" fill="#FF6A4D"/>
+            <ellipse cx="200" cy="332" rx="140" ry="14" fill="#0B5C7A"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+    <div class="wave-wrap">
+      <svg class="wave" viewBox="0 0 1200 48" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0 24 Q150 0 300 24 T600 24 T900 24 T1200 24 V48 H0 Z" fill="#FFFDF7"/>
+      </svg>
+    </div>
+
+    <section class="intro">
+      <div class="wrap intro-grid">
+        <div>
+          <h2>Brewed fresh, every morning</h2>
+          <p>Espresso drinks, drip coffee and cold brew made to order, with beans we pick ourselves.</p>
+        </div>
+        <div>
+          <h2>Something to eat with it</h2>
+          <p>Pastries, breakfast sandwiches and light lunches. <a href="#menu">Browse the menu</a>.</p>
+        </div>
+        <div>
+          <h2>Stop in when you can</h2>
+          <p>Check <a href="#hours">store hours</a> before you head over, or <a href="#contact">send us a message</a>.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- MENU -->
+  <div class="page" id="page-menu">
+    <div class="page-head">
+      <div class="wrap">
+        <h1>Menu</h1>
+        <p>Everything is made to order. Prices are in US dollars.</p>
+      </div>
+    </div>
+    <div class="menu">
+      <div class="wrap">
+        <div class="menu-grid">
+
+          <section aria-labelledby="m-hot">
+            <h2 id="m-hot">Hot coffee</h2>
+            <ul>
+              <li><div class="item-row"><span class="item-name">Espresso</span><span class="leader"></span><span class="price">$3.00</span></div></li>
+              <li><div class="item-row"><span class="item-name">Americano</span><span class="leader"></span><span class="price">$3.50</span></div></li>
+              <li><div class="item-row"><span class="item-name">Cappuccino</span><span class="leader"></span><span class="price">$4.50</span></div><p class="item-desc">Espresso with steamed milk and a thick layer of foam.</p></li>
+              <li><div class="item-row"><span class="item-name">Latte</span><span class="leader"></span><span class="price">$4.75</span></div><p class="item-desc">Espresso with steamed milk. Add vanilla, caramel or hazelnut for $0.75.</p></li>
+              <li><div class="item-row"><span class="item-name">Drip coffee</span><span class="leader"></span><span class="price">$2.75</span></div></li>
+            </ul>
+          </section>
+
+          <section aria-labelledby="m-cold">
+            <h2 id="m-cold">Iced and cold</h2>
+            <ul>
+              <li><div class="item-row"><span class="item-name">Iced latte</span><span class="leader"></span><span class="price">$5.00</span></div></li>
+              <li><div class="item-row"><span class="item-name">Cold brew</span><span class="leader"></span><span class="price">$4.50</span></div><p class="item-desc">Steeped for 18 hours. Smooth and strong.</p></li>
+              <li><div class="item-row"><span class="item-name">Frappé</span><span class="leader"></span><span class="price">$5.75</span></div><p class="item-desc">Blended coffee with ice and milk. Topped with whipped cream.</p></li>
+              <li><div class="item-row"><span class="item-name">Fresh fruit smoothie</span><span class="leader"></span><span class="price">$6.00</span></div><p class="item-desc">Mango, banana or passion fruit.</p></li>
+            </ul>
+          </section>
+
+          <section aria-labelledby="m-eat">
+            <h2 id="m-eat">Breakfast and lunch</h2>
+            <ul>
+              <li><div class="item-row"><span class="item-name">Breakfast sandwich</span><span class="leader"></span><span class="price">$7.50</span></div><p class="item-desc">Egg, cheese and your choice of bacon or ham on a toasted roll.</p></li>
+              <li><div class="item-row"><span class="item-name">Avocado toast</span><span class="leader"></span><span class="price">$8.50</span></div></li>
+              <li><div class="item-row"><span class="item-name">Ham and cheese panini</span><span class="leader"></span><span class="price">$8.00</span></div></li>
+              <li><div class="item-row"><span class="item-name">Fruit bowl</span><span class="leader"></span><span class="price">$6.50</span></div></li>
+            </ul>
+          </section>
+
+          <section aria-labelledby="m-sweet">
+            <h2 id="m-sweet">Pastries</h2>
+            <ul>
+              <li><div class="item-row"><span class="item-name">Butter croissant</span><span class="leader"></span><span class="price">$3.50</span></div></li>
+              <li><div class="item-row"><span class="item-name">Chocolate croissant</span><span class="leader"></span><span class="price">$4.00</span></div></li>
+              <li><div class="item-row"><span class="item-name">Banana bread slice</span><span class="leader"></span><span class="price">$3.75</span></div></li>
+              <li><div class="item-row"><span class="item-name">Coconut tart</span><span class="leader"></span><span class="price">$4.25</span></div></li>
+            </ul>
+          </section>
+
+        </div>
+        <p class="menu-note">Ask about oat or almond milk. Menu items and prices may change.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOURS -->
+  <div class="page" id="page-hours">
+    <div class="page-head">
+      <div class="wrap">
+        <h1>Store hours</h1>
+        <p>Times are Atlantic Standard Time (St. Martin local time).</p>
+      </div>
+    </div>
+    <div class="hours">
+      <div class="wrap hours-grid">
+        <table class="hours-table">
+          <caption style="position:absolute;left:-9999px">Weekly store hours</caption>
+          <tbody id="hours-body"></tbody>
+        </table>
+
+        <aside class="visit">
+          <h2>Visit us</h2>
+          <p data-contact="address"></p>
+          <p>Sint Maarten / Saint-Martin</p>
+          <p><a href="#contact">Directions and contact</a></p>
+          <div class="live">
+            <div class="status" data-status role="status"><span class="dot"></span><span class="status-text">Checking hours…</span></div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
+
+  <!-- GALLERY -->
+  <div class="page" id="page-gallery">
+    <div class="page-head">
+      <div class="wrap">
+        <h1>Gallery</h1>
+        <p>A look at our drinks, our food and our corner of the island.</p>
+      </div>
+    </div>
+    <div class="gallery">
+      <div class="wrap">
+        <div class="gallery-grid" id="gallery-grid"></div>
+        <p class="gallery-note">Click a photo to see it larger.</p>
+      </div>
+    </div>
+    <dialog id="lightbox" aria-label="Photo viewer">
+      <img id="lb-img" src="" alt="">
+      <div class="lb-bar"><span id="lb-cap"></span><button type="button" id="lb-close">Close</button></div>
+    </dialog>
+  </div>
+
+  <!-- CONTACT -->
+  <div class="page" id="page-contact">
+    <div class="page-head">
+      <div class="wrap">
+        <h1>Contact us</h1>
+        <p>Questions, catering or special orders? Send us a message or stop by.</p>
+      </div>
+    </div>
+
+    <div class="contact">
+      <div class="wrap contact-grid">
+        <div>
+          <h2>Send a message</h2>
+          <form id="contact-form" novalidate>
+            <div class="field">
+              <label for="cf-name">Your name</label>
+              <input id="cf-name" name="name" type="text" autocomplete="name" required>
+            </div>
+            <div class="field">
+              <label for="cf-email">Email</label>
+              <input id="cf-email" name="email" type="email" autocomplete="email" required>
+            </div>
+            <div class="field">
+              <label for="cf-message">Message</label>
+              <textarea id="cf-message" name="message" required></textarea>
+            </div>
+            <button class="btn primary" type="submit">Send message</button>
+            <p class="form-msg" id="form-msg" role="status"></p>
+          </form>
+        </div>
+
+        <div class="details">
+          <h2>Find us</h2>
+          <p><strong>Address</strong><span data-contact="address"></span></p>
+          <p><strong>Phone</strong><a data-contact="phone-link"></a></p>
+          <p><strong>Email</strong><a data-contact="email-link"></a></p>
+          <p><strong>Today</strong><span class="status-inline" data-status-inline></span></p>
+
+          <div class="follow">
+            <h2>Follow us</h2>
+            <ul class="social" data-social></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="map-section">
+      <div class="wrap">
+        <div class="map-frame">
+          <iframe id="map-frame" title="Map showing our location" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+        </div>
+        <p class="map-link"><a class="link" id="map-open" target="_blank" rel="noopener">Open in Google Maps</a></p>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div>
+      <strong>Steve and Nae's Coffee Shop SXM</strong>
+      <p>Sint Maarten / Saint-Martin</p>
+      <ul class="social icons-only" data-social data-icons-only></ul>
+    </div>
+    <div class="foot-right">
+      <p><a href="#menu">Menu</a> &nbsp; <a href="#hours">Hours</a> &nbsp; <a href="#gallery">Gallery</a> &nbsp; <a href="#contact">Contact</a></p>
+      <p>&copy; <span id="year"></span> Steve and Nae's Coffee Shop SXM</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  /* =====================================================
+     EDIT YOUR DETAILS HERE
+     ===================================================== */
+
+  // Weekly hours. 24-hour times. Use open: null for a closed day. Starts on Sunday.
+  const HOURS = [
+    { day: "Sunday",    open: "08:00", close: "14:00" },
+    { day: "Monday",    open: "06:30", close: "17:00" },
+    { day: "Tuesday",   open: "06:30", close: "17:00" },
+    { day: "Wednesday", open: "06:30", close: "17:00" },
+    { day: "Thursday",  open: "06:30", close: "17:00" },
+    { day: "Friday",    open: "06:30", close: "17:00" },
+    { day: "Saturday",  open: "07:00", close: "15:00" }
+  ];
+  const TIME_ZONE = "America/Puerto_Rico"; // Atlantic Standard Time, same as St. Martin
+
+  // Contact details. Leave a value as "" to show a reminder instead.
+  const CONTACT = {
+    address: "",                        // e.g. "12 Front Street, Philipsburg"
+    phone:   "",                        // e.g. "+1 721 555 0123"
+    email:   "hello@example.com"        // where messages from the form are sent (mailto fallback)
+  };
+
+  // Map. Put your street address or business name here so the pin lands on your shop.
+  const MAP_QUERY = "Sint Maarten";
+  const MAP_ZOOM = 12;                  // 12 = island view, 16 = street view
+
+  // Contact form. To send messages without opening the visitor's email app, create a free form
+  // at formspree.io and paste its URL here (looks like https://formspree.io/f/abcdwxyz).
+  // Leave "" to open the visitor's email app instead.
+  const FORM_ENDPOINT = "";
+
+  // Social links. Replace each URL with your real page. Remove a line to hide that link.
+  const SOCIAL = [
+    { name: "Instagram", url: "https://instagram.com/steveandnaescoffee" },
+    { name: "Facebook",  url: "https://facebook.com/steveandnaescoffee" },
+    { name: "TikTok",    url: "https://tiktok.com/@steveandnaescoffee" },
+    { name: "WhatsApp",  url: "https://wa.me/17215550123" }
+  ];
+
+  // Gallery photos. Put your image files in a folder next to this file (for example "photos/")
+  // and set src to the file path. Entries with src: "" show a placeholder tile.
+  const GALLERY = [
+    { src: "", alt: "A fresh espresso on the counter",   caption: "Morning espresso" },
+    { src: "", alt: "Pastries in the display case",       caption: "Fresh pastries" },
+    { src: "", alt: "Iced coffee with a straw",           caption: "Iced drinks" },
+    { src: "", alt: "The front of the coffee shop",       caption: "Our shop" },
+    { src: "", alt: "View of the island near the shop",   caption: "Island views" },
+    { src: "", alt: "A breakfast sandwich and coffee",    caption: "Breakfast" }
+  ];
+
+  /* =====================================================
+     SITE CODE (no need to edit below)
+     ===================================================== */
+
+  const ICONS = {
+    Instagram: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/></svg>',
+    Facebook:  '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M14 8h3V4h-3a4 4 0 0 0-4 4v2H7v4h3v8h4v-8h3l1-4h-4V8z"/></svg>',
+    TikTok:    '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 3c.3 2.3 1.8 3.8 4 4v3.2c-1.5 0-2.9-.5-4-1.3V15a6 6 0 1 1-6-6c.3 0 .7 0 1 .1v3.3a2.8 2.8 0 1 0 1.8 2.6V3H16z"/></svg>',
+    WhatsApp:  '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21l1.6-4.8A9 9 0 1 1 8 19.5L3 21z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 8.5c0 3.5 3 6.5 6.5 6.5l1-1.5-2-1-1 .8c-1-.4-2-1.4-2.4-2.4l.8-1-1-2L9 8.5z" fill="currentColor"/></svg>',
+    Other:     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></svg>'
+  };
+
+  /* ----- Hours ----- */
+  const toMinutes = t => { const [h, m] = t.split(":").map(Number); return h * 60 + m; };
+  const fmt = t => {
+    let [h, m] = t.split(":").map(Number);
+    const suffix = h >= 12 ? "pm" : "am";
+    h = h % 12 || 12;
+    return m ? `${h}:${String(m).padStart(2, "0")} ${suffix}` : `${h} ${suffix}`;
+  };
+
+  function islandNow() {
+    const parts = new Intl.DateTimeFormat("en-US", {
+      timeZone: TIME_ZONE, weekday: "long", hour: "2-digit", minute: "2-digit", hour12: false
+    }).formatToParts(new Date());
+    const get = type => parts.find(p => p.type === type).value;
+    return { dayIndex: HOURS.findIndex(h => h.day === get("weekday")), minutes: (Number(get("hour")) % 24) * 60 + Number(get("minute")) };
+  }
+
+  function buildHoursTable() {
+    const { dayIndex } = islandNow();
+    document.getElementById("hours-body").innerHTML = HOURS.map((h, i) => {
+      const isToday = i === dayIndex;
+      const time = h.open ? `${fmt(h.open)} to ${fmt(h.close)}` : "Closed";
+      return `<tr class="${isToday ? "today" : ""}"><th scope="row">${h.day}${isToday ? '<span class="today-badge">Today</span>' : ""}</th><td>${time}</td></tr>`;
+    }).join("");
+  }
+
+  function updateStatus() {
+    const { dayIndex, minutes } = islandNow();
+    const today = HOURS[dayIndex];
+    let open = false, text = "";
+    if (today.open) {
+      const o = toMinutes(today.open), c = toMinutes(today.close);
+      if (minutes >= o && minutes < c) { open = true; text = `Open now. Closes at ${fmt(today.close)}`; }
+      else if (minutes < o) { text = `Closed. Opens today at ${fmt(today.open)}`; }
+    }
+    if (!open && !text) {
+      for (let step = 1; step <= 7; step++) {
+        const next = HOURS[(dayIndex + step) % 7];
+        if (next.open) { text = `Closed. Opens ${step === 1 ? "tomorrow" : next.day} at ${fmt(next.open)}`; break; }
+      }
+    }
+    document.querySelectorAll("[data-status]").forEach(el => {
+      el.classList.toggle("open", open);
+      el.classList.toggle("closed", !open);
+      el.querySelector(".status-text").textContent = text;
+    });
+    document.querySelectorAll("[data-status-inline]").forEach(el => { el.textContent = text; });
+  }
+
+  /* ----- Contact details ----- */
+  function fillContact() {
+    document.querySelectorAll('[data-contact="address"]').forEach(el => {
+      el.textContent = CONTACT.address || "Add your street address in the CONTACT section of this file.";
+    });
+    const phone = document.querySelector('[data-contact="phone-link"]');
+    if (CONTACT.phone) { phone.textContent = CONTACT.phone; phone.href = "tel:" + CONTACT.phone.replace(/[^+\d]/g, ""); }
+    else { phone.textContent = "Add your phone number"; phone.removeAttribute("href"); }
+    const email = document.querySelector('[data-contact="email-link"]');
+    email.textContent = CONTACT.email; email.href = "mailto:" + CONTACT.email;
+  }
+
+  /* ----- Social links ----- */
+  function buildSocial() {
+    const html = SOCIAL.map(s => {
+      const icon = ICONS[s.name] || ICONS.Other;
+      return `<li><a href="${s.url}" target="_blank" rel="noopener" aria-label="${s.name}">${icon}<span class="s-name">${s.name}</span></a></li>`;
+    }).join("");
+    document.querySelectorAll("[data-social]").forEach(ul => {
+      ul.innerHTML = html;
+      if (ul.hasAttribute("data-icons-only")) ul.querySelectorAll(".s-name").forEach(n => n.remove());
+    });
+  }
+
+  /* ----- Gallery ----- */
+  function buildGallery() {
+    const grid = document.getElementById("gallery-grid");
+    grid.innerHTML = GALLERY.map((g, i) => g.src
+      ? `<button type="button" class="tile has-photo" data-i="${i}" aria-label="View larger: ${g.caption}"><img src="${g.src}" alt="${g.alt}" loading="lazy"><span class="cap">${g.caption}</span></button>`
+      : `<div class="tile" role="img" aria-label="Photo placeholder: ${g.caption}"><div class="ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l1.5-2h7L17 8h3v11H4z"/><circle cx="12" cy="13.5" r="3.5"/></svg><strong>${g.caption}</strong><span>Add your photo</span></div></div>`
+    ).join("");
+
+    const dlg = document.getElementById("lightbox");
+    grid.addEventListener("click", e => {
+      const btn = e.target.closest(".has-photo");
+      if (!btn) return;
+      const g = GALLERY[btn.dataset.i];
+      document.getElementById("lb-img").src = g.src;
+      document.getElementById("lb-img").alt = g.alt;
+      document.getElementById("lb-cap").textContent = g.caption;
+      dlg.showModal();
+    });
+    document.getElementById("lb-close").addEventListener("click", () => dlg.close());
+    dlg.addEventListener("click", e => { if (e.target === dlg) dlg.close(); });
+  }
+
+  /* ----- Map ----- */
+  let mapLoaded = false;
+  function loadMap() {
+    if (mapLoaded) return;
+    mapLoaded = true;
+    const q = encodeURIComponent(CONTACT.address ? CONTACT.address + ", Sint Maarten" : MAP_QUERY);
+    document.getElementById("map-frame").src = `https://maps.google.com/maps?q=${q}&z=${MAP_ZOOM}&output=embed`;
+    document.getElementById("map-open").href = `https://www.google.com/maps/search/?api=1&query=${q}`;
+  }
+
+  /* ----- Contact form ----- */
+  function setupForm() {
+    const form = document.getElementById("contact-form");
+    const msg = document.getElementById("form-msg");
+    form.addEventListener("submit", async e => {
+      e.preventDefault();
+      msg.className = "form-msg";
+      if (!form.checkValidity()) {
+        msg.classList.add("error");
+        msg.textContent = "Please fill in your name, a valid email and a message.";
+        form.reportValidity();
+        return;
+      }
+      const data = Object.fromEntries(new FormData(form));
+      if (FORM_ENDPOINT) {
+        try {
+          const res = await fetch(FORM_ENDPOINT, { method: "POST", headers: { "Accept": "application/json", "Content-Type": "application/json" }, body: JSON.stringify(data) });
+          if (!res.ok) throw new Error();
+          form.reset();
+          msg.textContent = "Thanks, your message was sent. We'll reply soon.";
+        } catch {
+          msg.classList.add("error");
+          msg.textContent = "Your message didn't send. Please try again or email us directly.";
+        }
+      } else {
+        const subject = encodeURIComponent("Message from " + data.name);
+        const body = encodeURIComponent(data.message + "\n\n" + data.name + "\n" + data.email);
+        window.location.href = `mailto:${CONTACT.email}?subject=${subject}&body=${body}`;
+        msg.textContent = "Opening your email app to send this message.";
+      }
+    });
+  }
+
+  /* ----- Page switching (#home, #menu, #hours, #gallery, #contact) ----- */
+  const PAGES = {
+    home: "Steve and Nae's Coffee Shop SXM",
+    menu: "Menu | Steve and Nae's Coffee Shop SXM",
+    hours: "Store hours | Steve and Nae's Coffee Shop SXM",
+    gallery: "Gallery | Steve and Nae's Coffee Shop SXM",
+    contact: "Contact | Steve and Nae's Coffee Shop SXM"
+  };
+  function route() {
+    const hash = location.hash.slice(1);
+    const name = PAGES[hash] ? hash : "home";
+    document.querySelectorAll(".page").forEach(p => p.classList.toggle("active", p.id === "page-" + name));
+    document.querySelectorAll("[data-link]").forEach(a => {
+      if (a.dataset.link === name) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
+    });
+    document.title = PAGES[name];
+    if (name === "contact") loadMap();
+    window.scrollTo(0, 0);
+  }
+
+  document.getElementById("year").textContent = new Date().getFullYear();
+  buildHoursTable();
+  updateStatus();
+  fillContact();
+  buildSocial();
+  buildGallery();
+  setupForm();
+  setInterval(() => { updateStatus(); buildHoursTable(); }, 60000);
+  window.addEventListener("hashchange", route);
+  route();
+</script>
+</body>
+</html>
